@@ -1,0 +1,48 @@
+<!-- Content Heading -->
+<% if (title) { %>
+<h1>
+<%= title %>
+</h1>
+<% } else { res.redirect('/') } %>
+
+<!-- Messages -->
+<%- messages() %>
+
+<!-- Errors -->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<!-- Registration form to display -->
+<div class="form-container">
+    <form class="form" action="/account/register" method="post">
+        <div class="name-field">
+            <label for="account_firstname">First Name:<input type="text" name="account_firstname" id="account_firstname" autocomplete="given-name"
+                    title="Please enter your first name" required></label>
+        </div>
+        <div class="name-field">
+            <label for="account_lastname">Last Name:<input type="text" name="account_lastname" id="account_lastname" autocomplete="family-name"
+                    title="Please enter your last name" required></label>
+        </div>
+        <div class="email-field">
+            <label for="account_email">E-mail Address:<input type="email" name="account_email"
+                    id="account_email" autocomplete="email" title="Please enter your e-mail address"
+                    placeholder="person@email.com" required>
+            </label>
+        </div>
+        <div class="password-field">
+            <label for="account_password">Password:<br>
+                <span id="password-reqs">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special
+                    character</span>
+                    <input type="password" name="account_password"
+                    id="account_password" autocomplete="new-password" minlength="6" title="Please enter your password. Min. 12 characters with one capital, one number and one special character."
+                    pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required> 
+            </label>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+</div>
