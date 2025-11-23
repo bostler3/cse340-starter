@@ -22,16 +22,16 @@
     <form class="form" action="/account/register" method="post">
         <div class="name-field">
             <label for="account_firstname">First Name:<input type="text" name="account_firstname" id="account_firstname" autocomplete="given-name"
-                    title="Please enter your first name" required></label>
+                    title="Please enter your first name" required value="<%= locals.account_firstname %>"></label>
         </div>
         <div class="name-field">
             <label for="account_lastname">Last Name:<input type="text" name="account_lastname" id="account_lastname" autocomplete="family-name"
-                    title="Please enter your last name" required></label>
+                    title="Please enter your last name" required value="<%= locals.account_lastname %>"></label>
         </div>
         <div class="email-field">
             <label for="account_email">E-mail Address:<input type="email" name="account_email"
                     id="account_email" autocomplete="email" title="Please enter your e-mail address"
-                    placeholder="person@email.com" required>
+                    placeholder="person@email.com" required value="<%= locals.account_email %>">
             </label>
         </div>
         <div class="password-field">
@@ -39,7 +39,7 @@
                 <span id="password-reqs">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special
                     character</span>
                     <input type="password" name="account_password"
-                    id="account_password" autocomplete="new-password" minlength="6" title="Please enter your password. Min. 12 characters with one capital, one number and one special character."
+                    id="account_password" autocomplete="new-password" title="Please enter your password. Min. 12 characters with one capital, one number and one special character."
                     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required> 
             </label>
         </div>

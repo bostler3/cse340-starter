@@ -8,14 +8,23 @@
 <!-- Messages -->
 <%- messages() %>
 
+<!-- Errors -->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
 <!-- Login form to display -->
 <div class="form-container">
-    <form class="form">
+    <form class="form" id="loginForm" action="/account/login" method="post">
         <!-- <fieldset id="credentials">
             <legend>Login Credentials</legend> -->
             <div class="email-field">
                 <label for="account_email">E-mail Address:<input type="email" name="account_email" id="account_email" autocomplete="email" 
-                    title="Please enter your e-mail address" placeholder="person@email.com" required>
+                    title="Please enter your e-mail address" placeholder="person@email.com" required value="<%= locals.account_email %>">
                 </label>
             </div>
             <div class="password-field">
@@ -23,7 +32,8 @@
                     <span id="password-reqs">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1
                         special character</span>
                         <input type="password" name="account_password" id="account_password" autocomplete="current-password"
-                        title="Please enter your password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+                        title="Please enter your password. Min. 12 characters with one capital, one number and one special character."
+                        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
                 </label>
             </div>
             <button type="submit">Login</button>

@@ -1,0 +1,67 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<!-- Messages -->
+<%- messages() %>
+
+<!-- Errors -->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<!-- Add Inventory form to display -->
+<div class="form-container">
+    <form class="form" action="/inv/add-inventory" method="post">
+        <div class="add-inventory-field">
+            <span id="add-inventory-reqs">All fields are required</span><br>
+            <label for="classificationList">Classification
+                <%- classificationList %>
+            </label>
+            <label for="inv_make">Make
+                <input type="text" name="inv_make" id="inv_make"
+                    title="Vehicle make must be at least three characters."
+                    minlength="3" placeholder="Min. of 3 characters" required value="<%= locals.inv_make %>">
+            </label>
+            <label for="inv_model">Make
+                <input type="text" name="inv_model" id="inv_model" title="Vehicle model must be at least three characters."
+                    minlength="3" placeholder="Min. of 3 characters" required value="<%= locals.inv_model %>">
+            </label>
+            <label for="inv_description">Description
+                <textarea name="inv_description" id="inv_description" title="Please enter the vehicle description."
+                    rows="6" placeholder="Please enter the vehicle description." required><%= locals.inv_description %></textarea>
+            </label>
+            <label for="inv_image">Image Path
+                <input type="text" name="inv_image" id="inv_image" title="Please enter the vehicle image file path."
+                    required value="/images/vehicles/no-image.png">
+            </label>
+            <label for="inv_thumbnail">Image Path
+                <input type="text" name="inv_thumbnail" id="inv_thumbnail" title="Please enter the vehicle thumbnail image file path." required
+                    value="/images/vehicles/no-image-tn.png">
+            </label>
+            <label for="inv_price">Price
+                <input type="number" min="0" name="inv_price" id="inv_price" title="Please enter the vehicle price as a positive number with no commas."
+                    placeholder="Numbers only (example: 10000)" required value="<%= locals.inv_price %>">
+            </label>
+            <label for="inv_year">Year
+                <input type="text" name="inv_year" id="inv_year" title="Please enter the vehicle's 4-digit year (example: 2025)."
+                    minlength="4" maxlength="4"
+                    pattern="^\d{4}$" placeholder="4-digit year (example: 2025)" required value="<%= locals.inv_year %>">
+            </label>
+            <label for="inv_miles">Miles
+                <input type="number" min="0" name="inv_miles" id="inv_miles" title="Please enter the vehicle's mileage as a positive number (example: 10000)." 
+                placeholder="Numbers only (example: 10000)" required value="<%= locals.inv_miles %>">
+            </label>
+            <label for="inv_color">Color
+                <input type="text" name="inv_color" id="inv_color" title="Please enter the vehicle's color." 
+                    minlength="1" placeholder="Vehicle color" required value="<%= locals.inv_color %>">
+            </label>
+        </div>
+        <button type="submit">Add Vehicle</button>
+    </form>
+</div>

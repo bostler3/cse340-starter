@@ -1,0 +1,33 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<!-- Messages -->
+<%- messages() %>
+
+<!-- Errors -->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<!-- Add Classification form to display -->
+<div class="form-container">
+    <form class="form" action="/inv/add-classification" method="post">
+        <div class="add-classification-field">
+            <span id="add-classification-reqs">* Classification name must be alphabetic characters only; no numbers, spaces or special
+                characters. *</span><br>
+            <label for="classification_name">Classification Name
+            <input type="text" name="classification_name" id="classification_name"
+            title="Classification name must be alphabetic characters only; no numbers, spaces or special characters."
+            pattern="[A-Za-z]+"
+            required value="<%= locals.classification_name %>">
+            </label>
+        </div>
+        <button type="submit">Add Classification</button>
+    </form>
+</div>
