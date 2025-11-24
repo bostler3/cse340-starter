@@ -248,7 +248,8 @@ figcaption {
 .form input[type="password"],
 .form input[type="number"],
 .form textarea,
-.form select
+.form select,
+#classificationList
 {
   display: block;
   margin-top: 0.25rem;
@@ -321,6 +322,45 @@ input:user-invalid, textarea:user-invalid, select:user-invalid {
   padding: 0 0 0 1rem;
   line-height: 2;
   font-size: larger;
+}
+
+#inventoryDisplay {
+  margin: 1rem;
+  padding: 1rem;
+  border-collapse: collapse;
+}
+
+#inventoryDisplay th, #inventoryDisplay td {
+  padding: 0.5rem;
+}
+
+#inventoryDisplay thead {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: none;
+  border-right: none;
+}
+
+#inventoryDisplay th:first-child,
+td:first-child {
+  border-left: 1px solid black;
+}
+
+#inventoryDisplay th:last-child,
+td:last-child {
+  border-right: 1px solid black;
+}
+
+#inventoryDisplay tr:last-child {
+  border-bottom: 1px solid black;
+}
+
+#inventoryDisplay td a {
+  color: black;
+}
+
+#inventoryDisplay tr:nth-child(even) {
+  background-color: rgba(128, 0, 128, 0.5);
 }
 
 /* Add Classification View */
