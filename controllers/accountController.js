@@ -129,4 +129,105 @@ async function accountLogin(req, res) {
     }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement }
+/* *************************
+ * Deliver Edit Account view
+ * ************************* */
+async function editAccountInfoView(req, res, next) {
+    const account_id = parseInt(req.params.account_id)
+    let nav = await utilities.getNav()
+    const data = await accountModel.getAccountById(account_id)
+    res.render("account/edit-account", {
+        title: "Edit Account",
+        nav,
+        errors: null,
+        account_id: data.account_id,
+        account_firstname: data.account_firstname,
+        account_lastname: data.account_lastname,
+        account_email: data.account_email
+    })
+}
+
+/* *************************
+ * Process Edit Account
+ * ************************* */
+async function updateAccountInfo(req, res) {
+    const { account_id, account_firstname, account_lastname, account_email } = req.body
+    let nav = await utilities.getNav()
+    const updateResult = await accountModel.editAccount(
+        parseInt(account_id),
+        account_firstname,
+        account_lastname,
+        account_email
+    )
+    if (updateResult) {
+        req.flash(
+            "notice",
+            `Congratulations, your account information was succesfully updated!`
+        )
+        res.redirect("/account/")
+    } else {
+        req.flash("notice", "Sorry, the update failed.")
+        res.status(501).render("account/edit-account", {
+            title: "Edit Account",
+            nav,
+            errors: null,
+            account_id,
+            account_firstname,
+            account_lastname,
+            account_email
+        })
+    }
+}
+
+/* *************************
+ * Process Password Change
+ * ************************* */
+async function updateAccountPassword(req, res) {
+    let nav = await utilities.getNav()
+    const { account_id, account_password } = req.body
+    // Hash the password before storing
+    let hashedPassword
+    try {
+        // Regular password and cost (salt is generated automatically)
+        hashedPassword = await bcrypt.hashSync(account_password, 10)
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was an error processing the password change')
+        res.status(500).render("account/edit-account", {
+            title: "Edit Account",
+            nav,
+            errors: null,
+            account_id
+        })
+    }
+    
+    const changePasswordResult = await accountModel.changePassword(
+        parseInt(account_id),
+        hashedPassword
+    )
+
+    if (changePasswordResult) {
+        req.flash(
+            "notice",
+            `Congratulations, your account information was succesfully updated!`
+        )
+        res.redirect("/account/")
+    } else {
+        req.flash("notice", "Sorry, the password change failed.")
+        res.status(501).render("account/edit-account", {
+            title: "Edit Account",
+            nav,
+            errors: null,
+            account_id
+        })
+    }
+}
+
+/* *************************
+ * Deliver Logout view
+ * ************************* */
+async function buildLogout(req, res, next) {
+    res.clearCookie("jwt")
+    res.redirect("/")
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, editAccountInfoView, updateAccountInfo, updateAccountPassword, buildLogout }

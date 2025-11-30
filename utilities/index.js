@@ -161,4 +161,32 @@ Util.checkLogin = (req, res, next) => {
     }
 }
 
+/* *********************
+ * Middleware to check account type
+ * of logged-in user and authorize access
+ * ********************* */
+Util.adminEmployeeAccess = (req, res, next) => {
+    if (res.locals.loggedin && (res.locals.accountData.account_type == "Admin" || res.locals.accountData.account_type == "Employee")) {
+        next()
+    } else {
+        req.flash("notice", "Restricted access.  Please log in.")
+        return res.redirect("/account/login")
+    }
+}
+
+/* *********************
+ * TESTING for Week 5 - Constructs the account portion of the header
+ * ********************* */
+Util.getAccountPart = function (req, res, next) {
+    let list = "<ul>"
+    if (res.locals.loggedin) {
+        list += '<li><a href="/account/" title="Click to log in">Welcome, ' + res.locals.accountData.account_firstname + '</a></li>'
+        list += '<li><a href="/account/logout" title="Click to log out">Logout</a></li>'
+    } else {
+        list += '<li><a href="/account/login" title="Click to log in">My Account</a></li>'
+    }
+    list += "</ul>"
+    return list
+}
+
 module.exports = Util

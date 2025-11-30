@@ -23,7 +23,7 @@ h1, h2, h3 {
   margin-top: 1rem;
 }
 
-#tools a {
+#tools-text, #tools a {
   font-family: "Carrois Gothic SC", sans-serif;
   font-size: smaller;
 }
@@ -283,9 +283,18 @@ figcaption {
   height: 45px;
 }
 
-.form button:hover {
+/* Got help from a Bing search for "css style disabled button if button already has linear-gradient background and transform animation" */
+.form button:hover:not(:disabled) {
   background: linear-gradient(45deg, lightgray, rgba(128, 0, 128, 0.5));
   transform: scale(1.05);
+}
+
+.form button:disabled {
+  background: lightgray;
+  color: black;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
 }
 
 #registration {
@@ -364,7 +373,7 @@ td:last-child {
 }
 
 /* Add Classification View */
-#add-classification-reqs, #add-inventory-reqs {
+#add-classification-reqs, #add-inventory-reqs, edit-inventory-reqs, delete-inventory-reqs, #password-reqs {
   margin: 1rem 0 0 0;
   color: blue;
   font-weight: bold;

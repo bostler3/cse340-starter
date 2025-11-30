@@ -15,16 +15,19 @@ router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByI
 router.get("/error", utilities.handleErrors(invController.throwIntentionalError));
 
 // Route to management view
-router.get("/management", utilities.handleErrors(invController.buildManagementView));
+router.get("/management", utilities.adminEmployeeAccess, utilities.handleErrors(invController.buildManagementView));
 
 // Route to Add Classification view
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassificationView));
+router.get("/add-classification", utilities.adminEmployeeAccess, utilities.handleErrors(invController.buildAddClassificationView));
 
 // Route to Get All Inventory by classification_id
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
 
-// Route to get inventory record by inventory_id to edit inventory information
-router.get("/edit-inventory/:inv_id", utilities.handleErrors(invController.editInventoryInfoView));
+// Route to edit inventory information
+router.get("/edit-inventory/:inv_id", utilities.adminEmployeeAccess, utilities.handleErrors(invController.editInventoryInfoView));
+
+// Route to delete an inventory record
+router.get("/delete/:inv_id", utilities.adminEmployeeAccess, utilities.handleErrors(invController.deleteVehicleView));
 
 // Route to process the Add Classification data
 router.post(
@@ -35,7 +38,7 @@ router.post(
 )
 
 // Route to Add Inventory view
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventoryView));
+router.get("/add-inventory", utilities.adminEmployeeAccess, utilities.handleErrors(invController.buildAddInventoryView));
 
 // Route to process the Add Inventory data
 router.post(
@@ -51,6 +54,12 @@ router.post(
     addValidate.addNewVehicleRules(),
     addValidate.checkEditVehicleData,
     utilities.handleErrors(invController.updateInventory)
+)
+
+// Route to process the Delete Vehicle data
+router.post(
+    '/delete',
+    utilities.handleErrors(invController.deleteInventory)
 )
 
 module.exports = router;

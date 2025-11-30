@@ -1,0 +1,47 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<!-- Messages -->
+<%- messages() %>
+
+<!-- Errors -->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<!-- Edit Inventory form to display -->
+<div class="form-container">
+    <form class="form" action="/inv/delete" method="post">
+        <div class="delete-inventory-field">
+            <span id="delete-inventory-reqs">Confirm Deletion - The deletion is permanent.</span><br>
+            <label for="inv_make">Make
+                <input type="text" name="inv_make" id="inv_make"
+                    title="Vehicle make must be at least three characters."
+                    minlength="3" placeholder="Min. of 3 characters" required readonly value="<%= locals.inv_make %>">
+            </label>
+            <label for="inv_model">Make
+                <input type="text" name="inv_model" id="inv_model" title="Vehicle model must be at least three characters."
+                    minlength="3" placeholder="Min. of 3 characters" required readonly value="<%= locals.inv_model %>">
+            </label>
+            <label for="inv_price">Price
+                <input type="number" min="0" name="inv_price" id="inv_price" title="Please enter the vehicle price as a positive number with no commas."
+                    placeholder="Numbers only (example: 10000)" required readonly value="<%= locals.inv_price %>">
+            </label>
+            <label for="inv_year">Year
+                <input type="text" name="inv_year" id="inv_year" title="Please enter the vehicle's 4-digit year (example: 2025)."
+                    minlength="4" maxlength="4"
+                    pattern="^\d{4}$" placeholder="4-digit year (example: 2025)" required readonly value="<%= locals.inv_year %>">
+            </label>
+        </div>
+        <button type="submit">Delete Vehicle</button>
+        <input type="hidden" name="inv_id"
+        <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+        <% } %>>
+    </form>
+</div>

@@ -14,6 +14,12 @@ router.get("/registration", utilities.handleErrors(accountController.buildRegist
 // Route for Account Management
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagement));
 
+// Route to edit account information
+router.get("/edit-account/:account_id", utilities.checkLogin, utilities.handleErrors(accountController.editAccountInfoView));
+
+// Route to logout
+router.get("/logout", utilities.handleErrors(accountController.buildLogout));
+
 // Route to process the registration data
 router.post(
     '/register',
@@ -28,6 +34,22 @@ router.post(
     regValidate.loginRules(),
     regValidate.checkLoginData,
     utilities.handleErrors(accountController.accountLogin)
+)
+
+// Process the account information update attempt
+router.post(
+    "/edit-account",
+    regValidate.editAccountInfoRules(),
+    regValidate.checkEditAccountInfoData,
+    utilities.handleErrors(accountController.updateAccountInfo)
+)
+
+// Process the account password change attempt
+router.post(
+    "/edit-account-password",
+    regValidate.editAccountPasswordRules(),
+    regValidate.checkEditAccountPasswordData,
+    utilities.handleErrors(accountController.updateAccountPassword)
 )
 
 module.exports = router
