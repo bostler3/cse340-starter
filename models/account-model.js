@@ -79,4 +79,45 @@ async function changePassword(account_id, account_password) {
     }
 }
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, editAccount, changePassword }
+/* ***************************
+ * Get all accounts
+ * *************************** */
+async function getAccounts() {
+    try {
+        return await pool.query("SELECT * FROM public.account ORDER BY account_lastname")
+    } catch (error) {
+        console.error("Model error for getting all accounts: " + error)
+    }
+}
+
+/* ***************************
+ * Process sending a message
+ * *************************** */
+async function sendAMessage(message_to_id, message_from_id, message_subject, message_body) {
+    try {
+        const sql = "INSERT INTO message (message_to_id, message_from_id, message_subject, message_body) VALUES ($1, $2, $3, $4) RETURNING *"
+        return await pool.query(sql, [message_to_id, message_from_id, message_subject, message_body])
+    } catch (error) {
+        return error.message
+    }
+}
+
+/* ***************************
+ * Get all messages by user_id
+ * *************************** */
+async function getMessagesByUserId(account_id) {
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.message AS m
+            JOIN public.account AS a
+            ON m.message_from_id = a.account_id
+            WHERE m.message_to_id = $1`,
+            [account_id]
+        )
+        return data.rows
+    } catch (error) {
+        console.error("getMessagesByUserId error " + error)
+    }
+}
+
+module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, editAccount, changePassword, getAccounts, sendAMessage, getMessagesByUserId }

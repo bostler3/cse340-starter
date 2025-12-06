@@ -1,0 +1,48 @@
+<!-- Content Heading -->
+<% if (title) { %>
+<h1>
+<%= title %>
+</h1>
+<% } else { res.redirect('/') } %>
+
+<!-- Messages -->
+<%- messages() %>
+
+<!-- Errors -->
+<% if (errors) { %>
+<ul class="notice">
+<% errors.array().forEach(error=> { %>
+    <li>
+        <%= error.msg %>
+    </li>
+    <% }) %>
+</ul>
+<% } %>
+
+<!-- Send Message form to display -->
+<div class="form-container">
+    <form class="form" id="sendMessageForm" action="/account/send-message" method="post">
+        <div class="send-message-field">
+            <span id="send-message-reqs">All fields are required</span><br>
+            <label for="toList">To
+                <%- toList %>
+            </label>
+            <label for="message_subject">Subject
+                <input type="text" name="message_subject" id="message_subject"
+                    title="Message subject" minlength="1"
+                    placeholder="Message subject" required value="<%= locals.message_subject %>">
+            </label>
+            <label for="message_body">Message
+                <textarea name="message_body" id="message_body"
+                    title="Please enter the message." rows="8"
+                    placeholder="Message content"
+                    required><%= locals.message_body %></textarea>
+            </label>
+        </div>
+        <button type="submit" id="sendMessageButton" disabled>Send Message</button>
+        <input type="hidden" name="message_from_id" <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+            <% } %>>
+    </form>
+</div>
+
+<script src="../../js/send-message.js"></script>

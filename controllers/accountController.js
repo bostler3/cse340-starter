@@ -230,4 +230,72 @@ async function buildLogout(req, res, next) {
     res.redirect("/")
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, editAccountInfoView, updateAccountInfo, updateAccountPassword, buildLogout }
+/* *************************
+ * Deliver messaging system view
+ * ************************* */
+async function buildMessagingSystem(req, res, next) {
+    let nav = await utilities.getNav()
+    const account_id = res.locals.accountData.account_id
+    const data = await accountModel.getMessagesByUserId(account_id)
+    let inbox = await utilities.buildInboxTable(data)
+    res.render("account/messaging", {
+        title: "Messaging System",
+        nav,
+        inbox,
+        errors: null
+    })
+}
+
+/* *************************
+ * Deliver send message view
+ * ************************* */
+async function buildSendMessage(req, res, next) {
+    const toList = await utilities.buildToList()
+    let nav = await utilities.getNav()
+    res.render("account/send-message", {
+        title: "Send a Message",
+        nav,
+        toList,
+        errors: null
+    })
+}
+
+/* *************************
+ * Process sending a message
+ * ************************* */
+async function sendMessage(req, res) {
+    const { message_to_id, message_from_id, message_subject, message_body } = req.body
+    let nav = await utilities.getNav()
+    const processMessage = await accountModel.sendAMessage(
+        parseInt(message_to_id),
+        parseInt(message_from_id),
+        message_subject,
+        message_body
+    )
+    if (processMessage) {
+        req.flash(
+            "notice",
+            `Congratulations, your message was succesfully sent!`
+        )
+        res.redirect("/account/messaging")
+    } else {
+        const toList = await utilities.buildToList()
+        req.flash("notice", "Sorry, the message was not sent.")
+        res.status(501).render("account/send-message", {
+            title: "Send a Message",
+            nav,
+            toList,
+            errors: null,
+            message_to_id,
+            message_from_id,
+            message_subject,
+            message_body
+        })
+    }
+}
+
+module.exports = {
+    buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement,
+    editAccountInfoView, updateAccountInfo, updateAccountPassword, buildLogout, buildMessagingSystem, buildSendMessage,
+    sendMessage
+}

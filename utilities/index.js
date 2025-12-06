@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const accountModel = require("../models/account-model")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const Util = {}
@@ -119,6 +120,56 @@ Util.buildClassificationList = async function (classification_id = null) {
 }
 
 /* *********************
+ * Build the "To" drop-down list HTML
+ * ********************* */
+Util.buildToList = async function (account_id = null) {
+    let data = await accountModel.getAccounts()
+    let toList = 
+        '<select name="message_to_id" id="toList" required>'
+    toList += "<option value='' disabled hidden>To</option>"
+    data.rows.forEach((row) => {
+        toList += '<option value="' + row.account_id + '"'
+        if (
+            account_id != null &&
+            row.account_id == account_id
+        ) {
+            toList += " selected"
+        }
+        toList += ">" + row.account_firstname + ' ' + row.account_lastname + "</option>"
+    })
+    toList += "</select>"
+    return toList
+}
+
+/* *********************
+ * Build the Inbox view HTML
+ * ********************* */
+Util.buildInboxTable = async function (data) {
+    let table
+    if (data.length > 0) {
+        table = '<table id="inbox-display">'
+        table += '<thead>'
+        table += '<tr><th>Received</th><th>From</th><th>Subject</th><th>Message</th></tr>'
+        table += '</thead>'
+        table += '<tbody>'
+        data.forEach(message => {
+            // Got help from a Bing search for "format date time object using javascript no seconds"
+            const date = new Date(message.message_timestamp)
+            const timestamp = date.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'})
+            table += '<tr><td>' + timestamp + '</td>'
+            table += '<td>' + message.account_firstname + ' ' + message.account_lastname + '</td>'
+            table += '<td>' + message.message_subject + '</td>'
+            table += '<td class="message-content">' + message.message_body + '</td></tr>'
+        })
+        table += '</tbody>'
+        table += '</table>'
+    } else {
+        table = '<p class="notice">Your inbox is empty</p>'
+    }
+    return table
+}
+
+/* *********************
  * Middleware for handling errors
  * Wrap other function in this for
  * General error handling
@@ -172,21 +223,6 @@ Util.adminEmployeeAccess = (req, res, next) => {
         req.flash("notice", "Restricted access.  Please log in.")
         return res.redirect("/account/login")
     }
-}
-
-/* *********************
- * TESTING for Week 5 - Constructs the account portion of the header
- * ********************* */
-Util.getAccountPart = function (req, res, next) {
-    let list = "<ul>"
-    if (res.locals.loggedin) {
-        list += '<li><a href="/account/" title="Click to log in">Welcome, ' + res.locals.accountData.account_firstname + '</a></li>'
-        list += '<li><a href="/account/logout" title="Click to log out">Logout</a></li>'
-    } else {
-        list += '<li><a href="/account/login" title="Click to log in">My Account</a></li>'
-    }
-    list += "</ul>"
-    return list
 }
 
 module.exports = Util

@@ -17,6 +17,12 @@ router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.b
 // Route to edit account information
 router.get("/edit-account/:account_id", utilities.checkLogin, utilities.handleErrors(accountController.editAccountInfoView));
 
+// Route to Messaging System
+router.get("/messaging", utilities.checkLogin, utilities.handleErrors(accountController.buildMessagingSystem));
+
+// Route to Send a Message form
+router.get("/send-message", utilities.checkLogin, utilities.handleErrors(accountController.buildSendMessage));
+
 // Route to logout
 router.get("/logout", utilities.handleErrors(accountController.buildLogout));
 
@@ -50,6 +56,14 @@ router.post(
     regValidate.editAccountPasswordRules(),
     regValidate.checkEditAccountPasswordData,
     utilities.handleErrors(accountController.updateAccountPassword)
+)
+
+// Process sending a message
+router.post(
+    "/send-message",
+    regValidate.sendMessageRules(),
+    regValidate.checkSendMessageData,
+    utilities.handleErrors(accountController.sendMessage)
 )
 
 module.exports = router

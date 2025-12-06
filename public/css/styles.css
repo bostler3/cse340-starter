@@ -333,17 +333,19 @@ input:user-invalid, textarea:user-invalid, select:user-invalid {
   font-size: larger;
 }
 
-#inventoryDisplay {
-  margin: 1rem;
+#inventoryDisplay, #inbox-display {
+  margin: 1rem 0;
   padding: 1rem;
   border-collapse: collapse;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
-#inventoryDisplay th, #inventoryDisplay td {
-  padding: 0.5rem;
+#inventoryDisplay th, #inventoryDisplay td, #inbox-display th, #inbox-display td {
+  padding: 0.75rem;
 }
 
-#inventoryDisplay thead {
+#inventoryDisplay thead, #inbox-display thead {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   border-left: none;
@@ -355,12 +357,22 @@ td:first-child {
   border-left: 1px solid black;
 }
 
+#inbox-display th:first-child,
+td:first-child {
+  border-left: 1px solid black;
+}
+
 #inventoryDisplay th:last-child,
 td:last-child {
   border-right: 1px solid black;
 }
 
-#inventoryDisplay tr:last-child {
+#inbox-display th:last-child,
+td:last-child {
+  border-right: 1px solid black;
+}
+
+#inventoryDisplay tr:last-child, #inbox-display tr:last-child {
   border-bottom: 1px solid black;
 }
 
@@ -368,12 +380,12 @@ td:last-child {
   color: black;
 }
 
-#inventoryDisplay tr:nth-child(even) {
+#inventoryDisplay tr:nth-child(even), #inbox-display tr:nth-child(even) {
   background-color: rgba(128, 0, 128, 0.5);
 }
 
 /* Add Classification View */
-#add-classification-reqs, #add-inventory-reqs, edit-inventory-reqs, delete-inventory-reqs, #password-reqs {
+#add-classification-reqs, #add-inventory-reqs, edit-inventory-reqs, delete-inventory-reqs, #password-reqs, #send-message-reqs {
   margin: 1rem 0 0 0;
   color: blue;
   font-weight: bold;

@@ -210,6 +210,9 @@ validate.editAccountPasswordRules = () => {
     ]
 }
 
+/* *************************
+ * Check Edit Account Password data and return errors or continue
+ * ************************* */
 validate.checkEditAccountPasswordData = async (req, res, next) => {
     let errors = []
     errors = validationResult(req)
@@ -219,6 +222,56 @@ validate.checkEditAccountPasswordData = async (req, res, next) => {
             errors,
             title: "Edit Account",
             nav
+        })
+        return
+    }
+    next()
+}
+
+/* *************************
+ * Send Message Data Validation Rules
+ * ************************* */
+validate.sendMessageRules = () => {
+    return [
+        // "To" field is required and must be an integer
+        body("message_to_id")
+            .trim()
+            .escape()
+            .notEmpty()
+            .isInt()
+            .toInt()
+            .withMessage("Please select a recipient for the message from the drop-down menu."), // on error, this message is sent
+        
+        // "Subject" field is required and must be a string
+        body("message_subject")
+            .trim()
+            .escape()
+            .notEmpty()
+            .isLength({ min: 1 })
+            .withMessage("Please enter a subject for the message."), // on error, this message is sent
+        
+        // valid e-mail address is required and cannot already exist in the database
+        body("message_body")
+            .trim()
+            .notEmpty()
+            .withMessage("Please enter a message."), // on error, this message is sent
+    ]
+}
+
+/* *************************
+ * Check Send Message data and return errors or continue
+ * ************************* */
+validate.checkSendMessageData = async (req, res, next) => {
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        const toList = await utilities.buildToList()
+        res.render("account/send-message", {
+            errors,
+            title: "Send a Message",
+            nav,
+            toList
         })
         return
     }
